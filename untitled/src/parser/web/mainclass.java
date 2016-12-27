@@ -21,9 +21,9 @@ public class mainclass{
             }
         }
     }
-    static private void collectFilenames(InputParameters parameters,ArrayList<String> fileId){
+    static private ArrayList<String> collectFilenames(InputParameters parameters){
         int page=1,countPicturesToDownload=parameters.countOfPictures;
-        ArrayList<String> tmparraylist=null;
+        ArrayList<String> tmparraylist=null,fileId= new ArrayList<>(parameters.countOfPictures);
         while(countPicturesToDownload>0){
             tmparraylist=parsewallpape("https://alpha.wallhaven.cc/search?q="+String.join("+",parameters.tags)+"&categories=111&page="+page,countPicturesToDownload);
             page++;
@@ -33,6 +33,7 @@ public class mainclass{
             }
             fileId.addAll(tmparraylist);
         }
+        return fileId;
        }
     static private void downloadAndSave(ArrayList<String> fileId,InputParameters parameters){
         for (int i=0;i<fileId.size();i++) {
@@ -60,7 +61,7 @@ public class mainclass{
         }
     }
     static ArrayList<String> parsewallpape(String link, Integer count){
-        ArrayList<String> listofindex=new ArrayList();
+        ArrayList<String> listofindex=new ArrayList <String>();
         URL ur= null;
         try {
             ur = new URL(link);
@@ -160,8 +161,7 @@ public class mainclass{
     }
     public static void main(String[] args) {
         InputParameters parameters =new InputParameters(args);
-        ArrayList<String> fileNames= new ArrayList<String>(parameters.countOfPictures);
-        collectFilenames(parameters,fileNames);
+        ArrayList<String> fileNames= collectFilenames(parameters);
         downloadAndSave(fileNames,parameters);
     }
 }
